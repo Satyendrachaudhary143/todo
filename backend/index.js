@@ -11,10 +11,29 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: "https://todo-iota-rust.vercel.app",
-    credentials: true
-}))
+
+// cors implemement
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://todo-iota-rust.vercel.app",
+    "https://your-frontend.vercel.app"
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true,
+    })
+);
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -156,7 +175,8 @@ app.post("/login", async (req, res, next) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
+            sameSite: "none",
             maxAge: 60 * 60 * 1000
         });
 

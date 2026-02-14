@@ -16,7 +16,7 @@ export default function Signup() {
 
         try {
             const { data } = await api.post("/register", form);
-            console.log(data);
+
 
             toast.success(data.message);
             navigate("/login");

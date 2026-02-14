@@ -16,7 +16,7 @@ export default function Login() {
         try {
             const { data } = await api.post("/login", form);
             toast.success(data.message);
-            console.log(data);
+
 
 
             localStorage.setItem("isLoggedIn", "true");
